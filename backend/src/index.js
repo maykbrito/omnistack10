@@ -1,6 +1,7 @@
 const { MONGO_USER, MONGO_PASS, MONGO_DB } = require('../.env')
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require('cors');
 const routes = require("./routes");
 
 const app = express();
@@ -15,6 +16,7 @@ mongoose.connect(
   }
 );
 
+app.use(cors())
 app.use(express.json());
 app.use(routes);
 
