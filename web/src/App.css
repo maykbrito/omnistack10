@@ -7,3 +7,7 @@
   flex-direction: row;
   align-items: flex-start;
 }
+
+#app main {
+  margin-left: 30px;
+}
