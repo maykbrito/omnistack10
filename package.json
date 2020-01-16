@@ -1,0 +1,15 @@
+{
+  "name": "omnistack10",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Mayk Brito <mayk@rocketseat.com.br>",
+  "license": "MIT",
+  "scripts": {
+    "server": "npm run dev --prefix backend",
+    "web": "npm run start --prefix web",
+    "dev": "concurrently \"npm run server\" \"npm run web\""
+  },
+  "devDependencies": {
+    "concurrently": "^5.0.2"
+  }
+}
