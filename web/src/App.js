@@ -8,6 +8,7 @@ import './Main.css';
 import './responsive.css';
 
 function App() {
+  const [devs, setDevs] = useState([])
   const [github_username, setGithubUsername] = useState('')
   const [techs, setTechs] = useState('')
   const [latitude, setLatitude] = useState('')
@@ -30,6 +31,16 @@ function App() {
     )
   }, [])
 
+  useEffect(() => {
+    async function loadDevs() {
+      const response = await api.get('/devs');
+
+      setDevs(response.data);
+    }
+
+    loadDevs()
+  }, [])
+
 
   async function handelAddDev(e) {
     e.preventDefault();
@@ -43,6 +54,8 @@ function App() {
 
     setGithubUsername('')
     setTechs('')
+
+    setDevs([...devs, response.data])
   }
   
   return (
@@ -101,50 +114,19 @@ function App() {
       </aside>
       <main>
         <ul>
-          <li className="dev-item">
-            <header>
-              <img src="https://placehold.it/500" alt="Imagem de"/>
-              <div className="user-info">
-                <strong>Mayk Brito</strong>
-                <span>Javascript, HTML, CSS</span>
-              </div>
-            </header>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Arum quae officia modi consequatur vero eum delectus voluptatibus!</p>
-            <a href="https://github.com/maykbrito">Acessar Perfil no Github</a>
-          </li>
-          <li className="dev-item">
-            <header>
-              <img src="https://placehold.it/500" alt="Imagem de"/>
-              <div className="user-info">
-                <strong>Mayk Brito</strong>
-                <span>Javascript, HTML, CSS</span>
-              </div>
-            </header>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Arum quae officia modi consequatur vero eum delectus voluptatibus!</p>
-            <a href="https://github.com/maykbrito">Acessar Perfil no Github</a>
-          </li>
-          <li className="dev-item">
-            <header>
-              <img src="https://placehold.it/500" alt="Imagem de"/>
-              <div className="user-info">
-                <strong>Mayk Brito</strong>
-                <span>Javascript, HTML, CSS</span>
-              </div>
-            </header>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Arum quae officia modi consequatur vero eum delectus voluptatibus!</p>
-            <a href="https://github.com/maykbrito">Acessar Perfil no Github</a>
-          </li>
-          <li className="dev-item">
-            <header>
-              <img src="https://placehold.it/500" alt="Imagem de"/>
-              <div className="user-info">
-                <strong>Mayk Brito</strong>
-                <span>Javascript, HTML, CSS</span>
-              </div>
-            </header>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Arum quae officia modi consequatur vero eum delectus voluptatibus!</p>
-            <a href="https://github.com/maykbrito">Acessar Perfil no Github</a>
-          </li>
+          {devs.map(dev => (
+            <li className="dev-item" key={dev.github_username}>
+              <header>
+                <img src={dev.avatar_url} alt={`Imagem de ${dev.name}`}/>
+                <div className="user-info">
+                  <strong>{dev.name}</strong>
+                  <span>{dev.techs.join(',')}</span>
+                </div>
+              </header>
+              <p>{dev.bio}</p>
+              <a href={`https://github.com/${dev.github_username}`}>Acessar Perfil no Github</a>
+            </li>
+          ))}
         </ul>
       </main>
     </div>
