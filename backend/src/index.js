@@ -4,9 +4,12 @@ const mongoose = require("mongoose");
 const cors = require('cors');
 const http = require('http')
 const routes = require("./routes");
+const { setupWebsocket } = require('./websocket')
 
 const app = express();
 const server = http.Server(app)
+
+setupWebsocket(server)
 
 mongoose.connect(
   `mongodb+srv://${MONGO_USER}:${MONGO_PASS}@cluster0-6ij0n.mongodb.net/${MONGO_DB}?retryWrites=true&w=majority`,
