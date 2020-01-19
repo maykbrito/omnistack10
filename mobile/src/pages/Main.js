@@ -3,8 +3,6 @@ import { StyleSheet, Image, View, Text } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import { requestPermissionsAsync, getCurrentPositionAsync } from 'expo-location';
 
-
-// we always has navigation props on every page
 export default function Main({ navigation }) {
   const [currentRegion, setCurrentRegion] = useState(null)
 
@@ -14,7 +12,7 @@ export default function Main({ navigation }) {
 
       if (granted) {
         const { coords } = await getCurrentPositionAsync({
-          enableHighAccuracy: true, //needs gps enabled
+          enableHighAccuracy: true,
         })
 
         const { latitude, longitude } = coords;
@@ -40,8 +38,9 @@ export default function Main({ navigation }) {
         <Image style={styles.avatar} source={{ uri: 'https://placehold.it/500' }} />
         
         <Callout onPress={() => {
-          {/* diff from onClick, but always onPress */}
-          navigation.navigate('Profile', { github_username: 'maykbrito' })
+          navigation.navigate('Profile', 
+          { github_username: 'maykbrito' } // it will be a param
+          )
         }}> 
           <View style={styles.callout}>
             <Text style={styles.devName}>Valeska Fabris</Text>
