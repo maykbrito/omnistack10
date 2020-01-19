@@ -4,7 +4,8 @@ import MapView, { Marker, Callout } from 'react-native-maps';
 import { requestPermissionsAsync, getCurrentPositionAsync } from 'expo-location';
 
 
-export default function Main() {
+// we always has navigation props on every page
+export default function Main({ navigation }) {
   const [currentRegion, setCurrentRegion] = useState(null)
 
   useEffect(() => {
@@ -38,8 +39,10 @@ export default function Main() {
       <Marker coordinate={{ latitude: -27.2111164, longitude: -49.6374491 }} >
         <Image style={styles.avatar} source={{ uri: 'https://placehold.it/500' }} />
         
-        <Callout>
-          {/* it will display when I click at avatar */}
+        <Callout onPress={() => {
+          {/* diff from onClick, but always onPress */}
+          navigation.navigate('Profile', { github_username: 'maykbrito' })
+        }}> 
           <View style={styles.callout}>
             <Text style={styles.devName}>Valeska Fabris</Text>
             <Text style={styles.devBio}>Mãe maravilhosa</Text>
