@@ -4,7 +4,10 @@ import MapView, { Marker, Callout } from 'react-native-maps';
 import { requestPermissionsAsync, getCurrentPositionAsync } from 'expo-location';
 import { MaterialIcons } from '@expo/vector-icons'
 
+import api from '../services/api'
+
 export default function Main({ navigation }) {
+  const [devs, setDevs] = useState([])
   const [currentRegion, setCurrentRegion] = useState(null)
 
   useEffect(() => {
@@ -30,28 +33,56 @@ export default function Main({ navigation }) {
     loadInitialPosition()
   }, [])
 
+  async function loadDevs() {
+    const { latitude, longitude } = currentRegion;
+
+    const response = await api.get('/search', {
+      params: {
+        latitude,
+        longitude,
+        techs: 'ReactJS',
+      }
+    })
+
+    setDevs(response.data)
+  }
+
+  function handleRegionChanged(region) {
+    console.log(region)
+    setCurrentRegion(region)
+  }
+ 
   if (!currentRegion) 
     return null
 
-  return (
+  return ( 
     <>
-      <MapView style={styles.map} initialRegion={currentRegion}>
-      <Marker coordinate={{ latitude: -27.2111164, longitude: -49.6374491 }} >
-        <Image style={styles.avatar} source={{ uri: 'https://placehold.it/500' }} />
+      <MapView 
+        onRegionChangeComplete={handleRegionChanged} 
+        style={styles.map} 
+        initialRegion={currentRegion}
+      >
+        <Marker 
+          coordinate={{ 
+            latitude: -27.2111164, 
+            longitude: -49.6374491
+        }}>
+          <Image style={styles.avatar} source={{ uri: 'https://placehold.it/500' }} />
         
-        <Callout onPress={() => {
-          navigation.navigate('Profile', 
-          { github_username: 'maykbrito' } // it will be a param
-          )
-        }}> 
-          <View style={styles.callout}>
-            <Text style={styles.devName}>Valeska Fabris</Text>
-            <Text style={styles.devBio}>Mãe maravilhosa</Text>
-            <Text style={styles.devTechs}>Apaixonada pela família</Text>
-          </View>
-        </Callout>
-      </Marker>
-    </MapView>
+          <Callout onPress={() => {
+            navigation.navigate('Profile', 
+            { github_username: 'maykbrito' } // it will be a param
+            )
+          }}> 
+            <View style={styles.callout}>
+              <Text style={styles.devName}>Valeska Fabris</Text>
+              <Text style={styles.devBio}>Mãe maravilhosa</Text>
+              <Text style={styles.devTechs}>Apaixonada pela família</Text>
+            </View>
+          </Callout>
+        </Marker>
+      </MapView>
+      
       <View style={styles.searchForm}>
         <TextInput 
           style={styles.searchInput}
