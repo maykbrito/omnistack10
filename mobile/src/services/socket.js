@@ -6,8 +6,10 @@ const socket = socketio('http://192.168.0.102:3333', {
 
 function connect({ latitude, longitude, techs }) {
   socket.io.opts.query = { latitude, longitude, techs }
-  
+
   socket.connect()
+
+  socket.on('message', console.log)
 }
 
 function disconnect(){
